@@ -1,6 +1,6 @@
 
+![330363534-5c6e2fa4-efff-4e8d-9915-acc271ab3a2c](https://github.com/magmodules/magento2-distance-based-shipping-hyva/assets/24823946/1c443125-7ba2-4cc0-9bd5-23044402a0dd)
 
-![header-git](https://github.com/magmodules/magento2-distance-based-shipping-hyva/assets/24823946/5c6e2fa4-efff-4e8d-9915-acc271ab3a2c)
 
 
 # Shipping Costs Based on Distance Hyvä Compatibility plugin
