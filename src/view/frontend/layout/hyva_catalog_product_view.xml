@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+    <move element="shipping-based-on-distance" destination="product.info.additional" />
+
+    <referenceBlock name="shipping-based-on-distance">
+        <block name="shipping-based-on-distance-loading" template="Hyva_Theme::ui/loading.phtml"/>
+    </referenceBlock>
+
+</page>

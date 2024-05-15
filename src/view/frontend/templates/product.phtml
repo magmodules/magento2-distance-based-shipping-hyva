@@ -1,0 +1,117 @@
+<?php
+
+/* @var \Magmodules\DistanceBasedShipping\ViewModel\Product $viewModel */
+$viewModel = $block->getViewModel();
+?>
+
+<?php if ($viewModel->isEnabled()): ?>
+    <div class="py-5 px-6 border border-gray-200 rounded-xl mt-5 bg-white"
+         x-data="initDistanceShipping()">
+        <h3 class="text-2xl mb-5">
+            <?= /* @noEscape */ __('Estimate shipping'); ?>
+        </h3>
+
+        <form id="estimate-shipping-based-on-shipment"
+              class="grid grid-cols-2 gap-5"
+              @submit.prevent="sendForm($el)">
+
+            <div class="col-span-2">
+                <label class="mb-1 text-sm text-gray-600 after:content-['*'] after:text-red-600">
+                    <?= /* @noEscape */ __('Country'); ?>
+                </label>
+                <div class="conrol">
+                    <select class="form-input w-full" name="country" required>
+                        <?= /* @noEscape */ $viewModel->getCountryOptions(); ?>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-1 text-sm text-gray-600 after:content-['*'] after:text-red-600">
+                    <?= /* @noEscape */ __('City'); ?>
+                </label>
+                <div class="conrol">
+                    <input class="form-input w-full" type="text" name="city" required />
+                </div>
+            </div>
+
+            <div>
+                <label class="mb-1 text-sm text-gray-600 after:content-['*'] after:text-red-600">
+                    <?= /* @noEscape */ __('Zip/Postal Code'); ?>
+                </label>
+                <div class="conrol">
+                    <input class="form-input w-full" type="text" name="postcode" required />
+                </div>
+            </div>
+
+            <div class="col-span-2">
+                <button type="submit" title="Submit" class="btn btn-primary w-full justify-center">
+                    <?= /* @noEscape */ __('Calculate'); ?>
+                </button>
+            </div>
+
+            <template x-if="show && distance">
+                <table class="col-span-2 w-full mt-4">
+                    <tr class="text-left">
+                        <th class="pb-2 pt-2.5 border-y border-gray-300"><?= /* @noEscape */ __('METHOD'); ?></th>
+                        <th class="pb-2 pt-2.5 border-y border-gray-300"><?= /* @noEscape */ __('COST'); ?></th>
+                    </tr>
+                    <tr>
+                        <td class="pb-2 pt-3">
+                            <b class="font-bold mb-1"
+                               title="<?= $block->escapeHtml($viewModel->getMethodTitle()); ?>">
+                                <?= $block->escapeHtml($viewModel->getMethodName()); ?>
+                            </b>
+                            <span class="inline-block" x-text="'(' + distance + ')'"></span>
+                        </td>
+                        <td class="pb-2 pt-3">
+                            <?= /* @noEscape */ __('Excl tax:'); ?>
+                            <span x-text="currency + rate"></span>
+                        </td>
+                    </tr>
+                </table>
+            </template>
+
+            <template x-if="show && !distance">
+                <div class="message warning col-span-2 px-4 font-normal max-w-max">
+                    <span>
+                        <?= /* @noEscape */ __('Can\'t calculate the distance. Verify the data is correct.'); ?>
+                    </span>
+                </div>
+            </template>
+        </form>
+
+        <?= $block->getChildHtml('shipping-based-on-distance-loading') ?>
+    </div>
+
+    <script>
+        function initDistanceShipping() {
+            return {
+                url: '<?= $block->escapeUrl($viewModel->getAjaxUrl()); ?>',
+                currency: '<?= $block->escapeHtml($viewModel->getCurrencySymbol()) ?>',
+                show: false,
+                distance: '',
+                rate: '',
+                isLoading: false,
+
+                async sendForm(form) {
+                    try {
+                        this.isLoading = true;
+
+                        const params = new URLSearchParams(new FormData(form)).toString();
+                        const response = await fetch(`${this.url}?${params}`);
+                        const json = await response.json();
+
+                        this.show = true;
+                        this.distance = json.distance;
+                        this.rate = json.rate;
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+            }
+        }
+    </script>
+<?php endif ?>

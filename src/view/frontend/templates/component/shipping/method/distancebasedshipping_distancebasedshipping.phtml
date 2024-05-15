@@ -1,0 +1,22 @@
+<?php declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Magmodules\DistanceBasedShipping\ViewModel\Product;
+
+/** @var Template $block */
+/** @var Product $viewModel */
+
+$viewModel = $block->getViewModel();
+?>
+
+<div id="distance-based-shipping-content" class="opacity-70"
+    x-data="initDistanceShipping()"
+    x-init="sendForm"
+    x-on:shipping-address-selected.document="sendForm">
+    <template x-if="distance">
+        <div>
+            <?= $block->escapeHtml($viewModel->getMethodTitle()); ?>
+            <span x-text="'(' + distance + ')'"></span>
+        </div>
+    </template>
+</div>

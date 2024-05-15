@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Magmodules\DistanceBasedShipping\ViewModel\Product;
+
+/** @var Template $block */
+/** @var Product $viewModel */
+
+$viewModel = $block->getViewModel();
+?>
+
+<script>
+    function initDistanceShipping() {
+        return {
+            url: '<?= $block->escapeUrl($viewModel->getAjaxUrl()); ?>',
+            distance: '',
+
+            async sendForm() {
+                try {
+                    const form = document.querySelector('form#shipping');
+                    const params = new URLSearchParams(new FormData(form)).toString().replace('country_id', 'country');
+                    const response = await fetch(`${this.url}?${params}`);
+                    const json = await response.json();
+
+                    this.distance = json.distance;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            },
+        }
+    }
+</script>

@@ -1,0 +1,9 @@
+/* Corrected styles */
+/* ================================ */
+li[id*="distancebasedshipping"] > div:first-child {
+    @apply items-baseline;
+}
+
+li[id*="distancebasedshipping"] > div:first-child input {
+    @apply relative top-[3px];
+}

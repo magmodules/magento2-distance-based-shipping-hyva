@@ -1,0 +1,7 @@
+<script>
+    document.addEventListener('magewire:load', () => {
+        Magewire.on('shipping_address_saved', () => {
+            document.dispatchEvent(new CustomEvent('shipping-address-selected'));
+        })
+    });
+</script>
